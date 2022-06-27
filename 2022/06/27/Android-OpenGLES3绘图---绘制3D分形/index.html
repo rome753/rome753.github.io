@@ -7,13 +7,19 @@
   
   <title>rome753</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
+  <meta name="description" content="几年前写了一篇Android SurfaceView 多线程绘图，多线程计算分形图案绘制到屏幕上，这种并行运算更适合用GPU处理。目前手机GPU有几百乃至上千个ALU运算单元，简单地说，相当于一个几百核的处理器，那么处理速度也就比CPU开启多线程快多了。 那么我们用OpenGL来实现一下，效果如下：    绘制的这个分形有点像煤气灶 (-_ -)!。不过3D效果很明显，动画也非常流畅，远远不是CP">
+<meta property="og:type" content="article">
 <meta property="og:title" content="rome753">
-<meta property="og:url" content="https://rome753.github.io/index.html">
+<meta property="og:url" content="https://rome753.github.io/2022/06/27/Android-OpenGLES3%E7%BB%98%E5%9B%BE---%E7%BB%98%E5%88%B63D%E5%88%86%E5%BD%A2/index.html">
 <meta property="og:site_name" content="rome753">
+<meta property="og:description" content="几年前写了一篇Android SurfaceView 多线程绘图，多线程计算分形图案绘制到屏幕上，这种并行运算更适合用GPU处理。目前手机GPU有几百乃至上千个ALU运算单元，简单地说，相当于一个几百核的处理器，那么处理速度也就比CPU开启多线程快多了。 那么我们用OpenGL来实现一下，效果如下：    绘制的这个分形有点像煤气灶 (-_ -)!。不过3D效果很明显，动画也非常流畅，远远不是CP">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1896166-8e3c68a5f0f26530.gif?imageMogr2/auto-orient/strip">
+<meta property="article:published_time" content="2022-06-27T09:35:10.000Z">
+<meta property="article:modified_time" content="2022-06-27T10:42:29.358Z">
 <meta property="article:author" content="rome753">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1896166-8e3c68a5f0f26530.gif?imageMogr2/auto-orient/strip">
   
     <link rel="alternate" href="/atom.xml" title="rome753" type="application/atom+xml">
   
@@ -62,9 +68,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-Android-OpenGLES3绘图---绘制3D分形" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-Android-OpenGLES3绘图---绘制3D分形" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2022/06/27/Android-OpenGLES3%E7%BB%98%E5%9B%BE---%E7%BB%98%E5%88%B63D%E5%88%86%E5%BD%A2/" class="article-date">
   <time datetime="2022-06-27T09:35:10.000Z" itemprop="datePublished">2022-06-27</time>
@@ -115,96 +119,19 @@
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-test-my-blog" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2022/04/27/test-my-blog/" class="article-date">
-  <time datetime="2022-04-27T09:10:34.000Z" itemprop="datePublished">2022-04-27</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/04/27/test-my-blog/">test_my_blog</a>
-    </h1>
+    <a href="/2022/04/27/test-my-blog/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">test_my_blog</div>
+    </a>
   
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://rome753.github.io/2022/04/27/test-my-blog/" data-id="cl2heth6g0006dws61q6xhk7i" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
   
 </article>
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2022/04/27/hello-world/" class="article-date">
-  <time datetime="2022-04-27T09:06:16.055Z" itemprop="datePublished">2022-04-27</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2022/04/27/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://rome753.github.io/2022/04/27/hello-world/" data-id="cl2heth670001dws60n8144po" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-
 
 </section>
         
