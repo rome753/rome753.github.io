@@ -118,12 +118,16 @@ function startMouseJoint() {
     }
 }
 
+var clicktime = 0;
+
 function onMouseDown(canvas, evt) {            
     updateMousePos(canvas, evt);
     if ( !mouseDown )
         startMouseJoint();
     mouseDown = true;
     updateStats();
+
+    clicktime = Date.now();
 }
 
 function onMouseUp(canvas, evt) {
@@ -131,6 +135,10 @@ function onMouseUp(canvas, evt) {
     updateMousePos(canvas, evt);
     updateStats();
     if ( mouseJoint != null ) {
+        if ((Date.now() - clicktime) < 150) {
+            console.log(mouseJoint.GetBodyB().GetUserData());
+        }
+
         world.DestroyJoint(mouseJoint);
         mouseJoint = null;
     }
@@ -286,6 +294,9 @@ function init() {
         this.m_fixture = fixture;
         return false;
     };
+
+
+
 }
 
 function changeTest() {    
@@ -370,9 +381,55 @@ function draw() {
             context.lineTo(p2.get_x(),p2.get_y());
             context.stroke();
         }
-        
+
+        drawImage();
+
     context.restore();
+
+
+
+    if (isFirst) {
+        isFirst = false;
+        var body = world.GetBodyList();
+        for (i = 0; i < 20; i++) {
+            if (body.a == 0) {
+                break;
+            }
+            var id = body.GetUserData();
+            if (id > 0) {
+
+                console.log(body);
+                console.log('id ' + id);
+                var c = body.GetWorldCenter();
+                console.log(c.x + ' ' + c.y);
+            }
+            body = body.GetNext();
+        }
+    }
+
+    context.drawImage(image,0,0,50,50);
 }
+
+function drawImage() {
+    var body = world.GetBodyList();
+    for (i = 0; i < 20; i++) {
+        if (body.a == 0) {
+            break;
+        }
+        var id = body.GetUserData();
+        if (id > 0) {
+            var c = body.GetWorldCenter();
+            var w = 1, h = 1;
+            context.drawImage(image, c.x - w / 2, c.y - h / 2, w, h);
+        }
+        body = body.GetNext();
+    }
+}
+
+var isFirst = true;
+
+var image = new Image();
+image.src = 'dia.png';
 
 function updateStats() {
     if ( ! showStats )
