@@ -44,8 +44,9 @@ def parseFile():
             print(data['title'])
 
             fpath = 'images/%s.png' % id
-            if os.path.exists(fpath) == False:
-                createImage(fpath, title)
+            if os.path.exists(fpath):
+                os.remove(fpath)
+            createImage(fpath, title)
 
         # print(jo[0]['object']['data'])
 
