@@ -70,6 +70,10 @@ def previewImage(text):
     font = ImageFont.truetype(fontPath, fontSize)
     textSize = font.getsize(text)
     
+    pd = 10
+    w = textSize[0] + pd + pd
+    h = textSize[1] + pd + pd
+
     fontColor = '#000000'
     if (text.startswith('Android')):
         fontColor = '#009933'
@@ -80,10 +84,11 @@ def previewImage(text):
     if (text.startswith('OpenCV')):
         fontColor = '#993399'
 
-    im = Image.new("RGB", textSize, (255,255,255))
+    im = Image.new("RGBA", [w, h], (255,255,255,0))
     dr = ImageDraw.Draw(im)
 
-    dr.text((0, 0), text, font=font, fill=fontColor)
+    dr.rounded_rectangle(xy=[0,0,w,h], radius=8, fill='#cccccc')
+    dr.text((pd, pd), text, font=font, fill=fontColor)
     im.show()
 
 
@@ -97,6 +102,10 @@ def createImage(fpath, text):
     font = ImageFont.truetype(fontPath, fontSize)
     textSize = font.getsize(text)
     
+    pd = 10
+    w = textSize[0] + pd + pd
+    h = textSize[1] + pd + pd
+
     fontColor = '#000000'
     if (text.startswith('Android')):
         fontColor = '#009933'
@@ -107,10 +116,11 @@ def createImage(fpath, text):
     if (text.startswith('OpenCV')):
         fontColor = '#993399'
 
-    im = Image.new("RGB", textSize, (255,255,255))
+    im = Image.new("RGBA", [w, h], (255,255,255,0))
     dr = ImageDraw.Draw(im)
 
-    dr.text((0, 0), text, font=font, fill=fontColor)
+    dr.rounded_rectangle(xy=[0,0,w,h], radius=8, fill='#eeeeee', outline='#ffffff', width=2)
+    dr.text((pd, pd), text, font=font, fill=fontColor)
     im.save(fpath)
 
 
