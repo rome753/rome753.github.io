@@ -137,6 +137,7 @@ function onMouseUp(canvas, evt) {
     if ( mouseJoint != null ) {
         if ((Date.now() - clicktime) < 150) {
             console.log(mouseJoint.GetBodyB().GetUserData());
+            window.open("https://www.baidu.com");
         }
 
         world.DestroyJoint(mouseJoint);
@@ -407,7 +408,6 @@ function draw() {
         }
     }
 
-    context.drawImage(image,0,0,50,50);
 }
 
 function drawImage() {
@@ -419,7 +419,13 @@ function drawImage() {
         var id = body.GetUserData();
         if (id > 0) {
             var c = body.GetWorldCenter();
-            var w = 1, h = 1;
+            var w = 1.92, h = 1.06;
+            var a = body.GetAngle();
+
+            // 旋转不在中心点，先平移再平移回来
+            context.translate(c.x, c.y);
+            context.rotate(a);
+            context.translate(-c.x, -c.y);
             context.drawImage(image, c.x - w / 2, c.y - h / 2, w, h);
         }
         body = body.GetNext();
@@ -429,7 +435,7 @@ function drawImage() {
 var isFirst = true;
 
 var image = new Image();
-image.src = 'dia.png';
+image.src = 'fly.png';
 
 function updateStats() {
     if ( ! showStats )

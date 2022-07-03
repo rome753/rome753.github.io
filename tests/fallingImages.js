@@ -73,24 +73,35 @@ embox2dTest_fallingImages.prototype.setup = function() {
 }
 
 function addImageBody(id) {
-    var ZERO = new b2Vec2(0, 0);
-    var temp = new b2Vec2(0, 0);
-    var bd = new b2BodyDef();
-    // bd.set_type(b2_dynamicBody);
-    bd.set_type(Module.b2_dynamicBody);
-    bd.set_position(ZERO);
-    var body = world.CreateBody(bd);
-    var randomValue = Math.random();
-    if ( randomValue < 0.2 )
-        body.CreateFixture(cshape, 1.0);
-    else
-        body.CreateFixture(createRandomPolygonShape(0.5), 1.0);
-    temp.Set(16*(Math.random()-0.5), 4.0 + 2.5);
-    body.SetTransform(temp, 0.0);
-    body.SetLinearVelocity(ZERO);
-    body.SetAwake(1);
-    body.SetActive(1);
+    var image = new Image()
+    image.src = 'fly.png'
+    image.onload = function() {
+        console.log(image.width + ' ' + image.height)
 
-    body.SetUserData(1);
+        var w = image.width
+        var h = image.height
+        var ZERO = new b2Vec2(0, 0);
+        var temp = new b2Vec2(0, 0);
+        var bd = new b2BodyDef();
+        // bd.set_type(b2_dynamicBody);
+        bd.set_type(Module.b2_dynamicBody);
+        bd.set_position(ZERO);
+        var body = world.CreateBody(bd);
+        var randomValue = Math.random();
+
+        var shape = new b2PolygonShape();
+        shape.SetAsBox(w / 2 / 100, h / 2 / 100);
+        body.CreateFixture(shape, 1);
+
+        temp.Set(16*(Math.random()-0.5), 4.0 + 2.5);
+        body.SetTransform(temp, 0.0);
+        body.SetLinearVelocity(ZERO);
+        // body.SetAngle
+        body.SetAwake(1);
+        body.SetActive(1);
+
+        body.SetUserData(1);
+        console.log(body)
+    }
 
 }
