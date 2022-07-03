@@ -14,21 +14,24 @@ embox2dTest_fallingImages.prototype.setNiceViewCenter = function() {
 embox2dTest_fallingImages.prototype.setup = function() {
 
     var NUMRANGE = [];    
-    while (NUMRANGE.length < 10)
-        NUMRANGE.push(NUMRANGE.length+1);
+    // while (NUMRANGE.length < 10)
+    //     NUMRANGE.push(NUMRANGE.length+1);
     bodies = [null]; // Indexes start from 1
     
     var bd_ground = new b2BodyDef();
     var groundBody = world.CreateBody(bd_ground);
 
+    var w2 = CW / 2 / PTM;
+    var h2 = CH / 2 / PTM;
     //ground edges
     var shape0 = new b2EdgeShape();
-    shape0.Set(new b2Vec2(-40.0, -6.0), new b2Vec2(40.0, -6.0));
+    shape0.Set(new b2Vec2(-w2, -h2), new b2Vec2(w2, -h2));
     groundBody.CreateFixture(shape0, 0.0);
-    shape0.Set(new b2Vec2(-9.0, -6.0), new b2Vec2(-9.0, -4.0));
+    shape0.Set(new b2Vec2(-w2, -h2), new b2Vec2(-w2, h2));
     groundBody.CreateFixture(shape0, 0.0);
-    shape0.Set(new b2Vec2(9.0, -6.0), new b2Vec2(9.0, -4.0));
+    shape0.Set(new b2Vec2(w2, -h2), new b2Vec2(w2, h2));
     groundBody.CreateFixture(shape0, 0.0);
+
 
     var cshape = new b2CircleShape();
     cshape.set_m_radius(0.5);
@@ -95,7 +98,7 @@ function addImageBody(id) {
         shape.SetAsBox(w / 2, h / 2);
         body.CreateFixture(shape, 1);
 
-        temp.Set(16*(Math.random()-0.5), 4.0 + 2.5);
+        temp.Set(22*(Math.random()-0.5), 12);
         body.SetTransform(temp, 0.0);
         body.SetLinearVelocity(ZERO);
         // body.SetAngle
@@ -130,22 +133,35 @@ function handleJsonStr(str) {
     var arr = str.split("\n");
     for (i = 0; i < arr.length; i++) {
         if (arr[i].length <= 2) {
-            continue
+            continue;
         }
         var json = JSON.parse(arr[i]);
         for (j = 0; j < json.length; j++) {
-            var data = json[j].object.data
-            var id = data.id
-            myBlogJson[id] = data
+            var data = json[j].object.data;
+            var id = data.id;
+            allId.push(id);
+            myBlogJson[id] = data;
             console.log(data.title);
-            addImageBody(id);
+            // addImageBody(id);
 
-            var title = data.title
-            var time = data.first_shared_at
-            var slug = data.slug
+            // var title = data.title
+            // var time = data.first_shared_at
+            // var slug = data.slug
         }
-        // if (i > 1) {
-        //     break
-        // }
+    }
+
+    addOne()
+}
+
+function addOne() {
+    if (allIdIndex < allId.length) {
+        var id = allId[allIdIndex++];
+        addImageBody(id);
+        setTimeout(() => {
+            addOne();
+        }, 100);
     }
 }
+
+var allId = []
+var allIdIndex = 0

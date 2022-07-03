@@ -5,6 +5,9 @@ var e_pairBit = 0x0008;
 var e_centerOfMassBit = 0x0010;
 
 var PTM = 32;
+var CW = 1080;
+var CH = 960;
+var hideDebugDiv = true;
 
 var world = null;
 var mouseJointGroundBody;
@@ -36,8 +39,8 @@ var canvasOffset = {
     y: 0
 };        
 var viewCenterPixel = {
-    x:320,
-    y:240
+    x:CW / 2,
+    y:CH / 2
 };
 var currentTest = null;
 
@@ -252,6 +255,7 @@ function updateContinuousRefreshStatus() {
 }
 
 function init() {
+    document.getElementById("debugDiv").hidden = hideDebugDiv
     
     canvas = document.getElementById("canvas");
     context = canvas.getContext( '2d' );
@@ -369,11 +373,11 @@ function draw() {
         context.scale(PTM,PTM);
         context.lineWidth /= PTM;
         
-        drawAxes(context);
+        // drawAxes(context);
         drawImage();
         
         context.fillStyle = 'rgb(255,255,0)';
-        world.DrawDebugData();
+        // world.DrawDebugData();
         
         if ( mouseJoint != null ) {
             //mouse joint is not drawn with regular joints in debug draw
@@ -385,7 +389,6 @@ function draw() {
             context.lineTo(p2.get_x(),p2.get_y());
             context.stroke();
         }
-
 
     context.restore();
 }

@@ -1,14 +1,97 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>WebGL Demo</title>
-    <link rel="stylesheet" href="./webgl.css" type="text/css">
+<html>
+    <head>
+        <title>Rome753's Blog</title>
+        
+        <script type="text/javascript" src="build/Box2D_v2.2.1_min.js"></script>
+        <script type="text/javascript" src="helpers/embox2d-helpers.js"></script>
+        <script type="text/javascript" src="helpers/embox2d-html5canvas-debugDraw.js"></script>
+        <script type="text/javascript" src="embox2d-html5canvas-testbed.js"></script>
+        
+        <script type="text/javascript" src="tests/fallingImages.js"></script>
+        <script type="text/javascript" src="tests/fallingShapes.js"></script>
+        <script type="text/javascript" src="tests/pyramid.js"></script>
+        <script type="text/javascript" src="tests/car.js"></script>
+        <script type="text/javascript" src="tests/balancedMobile.js"></script>
+        <script type="text/javascript" src="tests/pulleyJoint.js"></script>
+        <script type="text/javascript" src="tests/ropeJoint.js"></script>
+        <script type="text/javascript" src="tests/dominos.js"></script>
+        <!--
+        <script type="text/javascript" src="tests/template.js"></script>
+        -->
+        
+        <script type="text/javascript">  
+            var Box2D;
+            if (!Box2D) Box2D = (typeof Box2D !== 'undefined' ? Box2D : null) || Module; 
+            Box2D().then(function(r){
+                Box2D = r;
+                Module = Box2D;
+                if(document.readyState === "complete"){
+                    afterDocumentLoaded()
+                } else {
+                    window.onload = afterDocumentLoaded
+                }
+            });
 
-    <script src="text2image.js" defer></script>
-  </head>
+            const afterDocumentLoaded = function(){
+                using(Box2D, "b2.+");
+                init();
+                changeTest();
+                animate();
+            };        
+        </script>
+        
+    </head>
+    <body>
+        <div style="text-align:center">
+            <h2>Rome753's Blog</h2>
 
-  <body id="mybody">
-    <!-- <canvas id="glcanvas" width="640" height="480"></canvas> -->
-  </body>
+            <div style="margin:auto;width:1080px;padding:2px;border:0px solid #888;text-align:left"> 
+                <canvas id="canvas" width="1080" height="960" tabindex='1'></canvas>  
+            </div>
+            <div id='debugDiv' style="margin:auto;width:640px;padding:2px;border:1px solid #888;text-align:left">            
+            
+                <!--<canvas id="canvas" width="480" height="320" tabindex='1'></canvas>-->
+                <div style="width:636px;padding:2px;background-color:#ddd">
+                <div style="text-align:center">
+                    <button id="reloadButton" onclick="resetScene();">Reset</button>
+                    <button id="pauseButton" onclick="pause();">Pause</button>
+                    <button id="stepButton" onclick="step();">Single step</button>
+                    (Keyboard: R, P, S)<br>
+                    Zoom
+                    <button id="zoomInButton" onclick="zoomIn();">+</button>
+                    <button id="zoomOutButton" onclick="zoomOut();">-</button>
+                    (Keyboard: X, Z)<br>
+                    Hold down Shift while moving the mouse to pan (Keyboard: arrow keys)<br>
+                    You need to click on the canvas before using the keyboard.<br>
+                    <br>
+                    Test: <select id="testSelection" onchange="changeTest();">
+                        <option value="embox2dTest_fallingImages">Falling images</option>
+                        <option value="embox2dTest_car">Car (use j/k to move)</option>
+                        <option value="embox2dTest_dominos">Dominos</option>
+                        <option value="embox2dTest_ropeJoint">Rope joint</option>
+                        <option value="embox2dTest_pulleyJoint">Pulley joint</option>
+                        <option value="embox2dTest_fallingShapes">Falling shapes</option>
+                        <option value="embox2dTest_pyramid">Pyramid</option>
+                        
+                        <option value="embox2dTest_balancedMobile">Balanced mobile</option>                        
+                    </select>
+                </div>
+                <br>
+                    
+                Debug draw flags:<br>
+                <input id="drawShapesCheck" type="checkbox" onclick="updateWorldFromDebugDrawCheckboxes();">Shapes<br>
+                <input id="drawJointsCheck" type="checkbox" onclick="updateWorldFromDebugDrawCheckboxes();">Joints<br>
+                <input id="drawAABBsCheck" type="checkbox" onclick="updateWorldFromDebugDrawCheckboxes();">AABBs<br>
+                <!--<input id="drawPairsCheck" type="checkbox" onclick="updateWorldFromDebugDrawCheckboxes();">Pairs<br>-->
+                <input id="drawTransformsCheck" type="checkbox" onclick="updateWorldFromDebugDrawCheckboxes();">Transforms<br>
+                <br>
+                
+                <input id="showStatsCheck" type="checkbox" onclick="updateContinuousRefreshStatus();">Show stats<br>
+                <span id="feedbackSpan"></span>
+                <br>
+                </div>
+            </div>        
+        </div>
+    </body>
 </html>
+
