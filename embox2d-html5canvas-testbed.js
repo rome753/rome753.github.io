@@ -6,7 +6,7 @@ var e_centerOfMassBit = 0x0010;
 
 var PTM = 32;
 var CW = 1080;
-var CH = 960;
+var CH = 720;
 var hideDebugDiv = true;
 
 var world = null;
@@ -140,9 +140,13 @@ function onMouseUp(canvas, evt) {
     if ( mouseJoint != null ) {
         if ((Date.now() - clicktime) < 150) {
             var id = mouseJoint.GetBodyB().GetUserData();
-            var slug = myBlogJson[id].slug;
-            console.log(slug);
-            window.open('https://www.jianshu.com/p/' + slug);
+            if (id == 753) {
+                window.open('https://github.com/rome753');
+            } else {
+                var slug = myBlogJson[id].slug;
+                console.log(slug);
+                window.open('https://www.jianshu.com/p/' + slug);
+            }
         }
 
         world.DestroyJoint(mouseJoint);
@@ -402,8 +406,8 @@ function drawImage() {
         var id = body.GetUserData();
         if (id > 0) {
             var c = body.GetWorldCenter();
-            var w = myBlogImages.get(id).width / myScale;
-            var h = myBlogImages.get(id).height / myScale;
+            var w = myBlogImages.get(id).width / myImageScale;
+            var h = myBlogImages.get(id).height / myImageScale;
             var a = body.GetAngle();
 
         

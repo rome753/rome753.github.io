@@ -1,4 +1,4 @@
-var myScale = 50
+var myImageScale = 52
 var myBlogJson = JSON.parse('{}')
 var myBlogImages = new Map();
 
@@ -27,9 +27,9 @@ embox2dTest_fallingImages.prototype.setup = function() {
     var shape0 = new b2EdgeShape();
     shape0.Set(new b2Vec2(-w2, -h2), new b2Vec2(w2, -h2));
     groundBody.CreateFixture(shape0, 0.0);
-    shape0.Set(new b2Vec2(-w2, -h2), new b2Vec2(-w2, h2));
+    shape0.Set(new b2Vec2(-w2, -h2), new b2Vec2(-w2, h2 * 10));
     groundBody.CreateFixture(shape0, 0.0);
-    shape0.Set(new b2Vec2(w2, -h2), new b2Vec2(w2, h2));
+    shape0.Set(new b2Vec2(w2, -h2), new b2Vec2(w2, h2 * 10));
     groundBody.CreateFixture(shape0, 0.0);
 
 
@@ -83,8 +83,8 @@ function addImageBody(id) {
     var image = new Image()
     image.src = 'images/' + id + '.png'
     image.onload = function() {
-        var w = image.width / myScale
-        var h = image.height / myScale
+        var w = image.width / myImageScale
+        var h = image.height / myImageScale
         var ZERO = new b2Vec2(0, 0);
         var temp = new b2Vec2(0, 0);
         var bd = new b2BodyDef();
@@ -94,9 +94,17 @@ function addImageBody(id) {
         var body = world.CreateBody(bd);
         var randomValue = Math.random();
 
-        var shape = new b2PolygonShape();
-        shape.SetAsBox(w / 2, h / 2);
-        body.CreateFixture(shape, 1);
+        if (id == 753) {
+            var shape = new b2CircleShape();
+            console.log(shape);
+            shape.set_m_radius(w / 2);
+            body.CreateFixture(shape, 1);
+
+        } else {
+            var shape = new b2PolygonShape();
+            shape.SetAsBox(w / 2, h / 2);
+            body.CreateFixture(shape, 1);
+        }
 
         temp.Set(22*(Math.random()-0.5), 12);
         body.SetTransform(temp, 0.0);
@@ -107,7 +115,6 @@ function addImageBody(id) {
 
         body.SetUserData(id);
         myBlogImages.set(id, image)
-        console.log(id + ' ' + image.width + ' ' + image.height);
     }
 }
 
@@ -160,6 +167,8 @@ function addOne() {
         setTimeout(() => {
             addOne();
         }, 100);
+    } else {
+        addImageBody(753)
     }
 }
 
