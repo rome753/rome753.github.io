@@ -136,7 +136,9 @@ function onMouseUp(canvas, evt) {
     updateStats();
     if ( mouseJoint != null ) {
         if ((Date.now() - clicktime) < 150) {
-            console.log(mouseJoint.GetBodyB().GetUserData());
+            var id = mouseJoint.GetBodyB().GetUserData();
+            console.log(id);
+            console.log(myBlogImages.get(id));
             window.open("https://www.baidu.com");
         }
 
@@ -368,6 +370,7 @@ function draw() {
         context.lineWidth /= PTM;
         
         drawAxes(context);
+        drawImage();
         
         context.fillStyle = 'rgb(255,255,0)';
         world.DrawDebugData();
@@ -383,31 +386,8 @@ function draw() {
             context.stroke();
         }
 
-        drawImage();
 
     context.restore();
-
-
-
-    if (isFirst) {
-        isFirst = false;
-        var body = world.GetBodyList();
-        for (i = 0; i < 20; i++) {
-            if (body.a == 0) {
-                break;
-            }
-            var id = body.GetUserData();
-            if (id > 0) {
-
-                console.log(body);
-                console.log('id ' + id);
-                var c = body.GetWorldCenter();
-                console.log(c.x + ' ' + c.y);
-            }
-            body = body.GetNext();
-        }
-    }
-
 }
 
 function drawImage() {
@@ -419,20 +399,23 @@ function drawImage() {
         var id = body.GetUserData();
         if (id > 0) {
             var c = body.GetWorldCenter();
-            var w = 1.92, h = 1.06;
+            var w = myBlogImages.get(id).width / myScale;
+            var h = myBlogImages.get(id).height / myScale;
             var a = body.GetAngle();
 
             // 旋转不在中心点，先平移再平移回来
+            context.save();              
             context.translate(c.x, c.y);
-            context.rotate(a);
+            context.scale(1,-1);  
+            context.rotate(-a);
             context.translate(-c.x, -c.y);
+            var image = myBlogImages.get(id)
             context.drawImage(image, c.x - w / 2, c.y - h / 2, w, h);
+            context.restore();
         }
         body = body.GetNext();
     }
 }
-
-var isFirst = true;
 
 var image = new Image();
 image.src = 'fly.png';

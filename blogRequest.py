@@ -12,7 +12,7 @@ def requestSaveFile():
         "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"    
     }
     hasClose = False
-    for i in range(0, 20):
+    for i in range(1, 20):
         url = 'https://www.jianshu.com/asimov/users/slug/6740854c6174/public_notes?shared_at=top&page=%d' % i
         r = requests.get(url, headers=headers)
         jo = json.loads(r.content)
@@ -71,7 +71,6 @@ def createImage(fpath, text):
 
 
 
-if os.path.exists(jsonPath):
-    parseFile()
-else:
+if os.path.exists(jsonPath) == False:
     requestSaveFile()
+parseFile()

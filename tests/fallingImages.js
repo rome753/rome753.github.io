@@ -1,3 +1,7 @@
+var myScale = 110
+var myBlogJson = JSON.parse('{}')
+var myBlogImages = new Map();
+
 
 var embox2dTest_fallingImages = function() {
 }
@@ -50,36 +54,34 @@ embox2dTest_fallingImages.prototype.setup = function() {
         body.SetActive(1);
     });
 
-    addImageBody(1);
-    
-    //static polygon and chain shapes
-    {
-        var verts = [];
-        verts.push( new b2Vec2( 7,-1) );
-        verts.push( new b2Vec2( 8,-2) );
-        verts.push( new b2Vec2( 9, 3) );
-        verts.push( new b2Vec2( 7, 1) );
-        var polygonShape = createPolygonShape(verts);
-        groundBody.CreateFixture(polygonShape, 0.0);
+    // //static polygon and chain shapes
+    // {
+    //     var verts = [];
+    //     verts.push( new b2Vec2( 7,-1) );
+    //     verts.push( new b2Vec2( 8,-2) );
+    //     verts.push( new b2Vec2( 9, 3) );
+    //     verts.push( new b2Vec2( 7, 1) );
+    //     var polygonShape = createPolygonShape(verts);
+    //     groundBody.CreateFixture(polygonShape, 0.0);
         
-        //mirror vertices in x-axis and use for chain shape
-        for (var i = 0; i < verts.length; i++)
-            verts[i].set_x( -verts[i].get_x() );
-        verts.reverse();
-        var chainShape = createChainShape(verts, true);//true for closed loop *** some problem with this atm
-        // polygonShape = createPolygonShape(verts);
-        groundBody.CreateFixture(chainShape, 0.0);
-    }
+    //     //mirror vertices in x-axis and use for chain shape
+    //     for (var i = 0; i < verts.length; i++)
+    //         verts[i].set_x( -verts[i].get_x() );
+    //     verts.reverse();
+    //     var chainShape = createChainShape(verts, true);//true for closed loop *** some problem with this atm
+    //     // polygonShape = createPolygonShape(verts);
+    //     groundBody.CreateFixture(chainShape, 0.0);
+    // }
+
+    initMyBlog('blogJsonFile.txt')
 }
 
 function addImageBody(id) {
     var image = new Image()
-    image.src = 'fly.png'
+    image.src = 'images/' + id + '.png'
     image.onload = function() {
-        console.log(image.width + ' ' + image.height)
-
-        var w = image.width
-        var h = image.height
+        var w = image.width / myScale
+        var h = image.height / myScale
         var ZERO = new b2Vec2(0, 0);
         var temp = new b2Vec2(0, 0);
         var bd = new b2BodyDef();
@@ -90,7 +92,7 @@ function addImageBody(id) {
         var randomValue = Math.random();
 
         var shape = new b2PolygonShape();
-        shape.SetAsBox(w / 2 / 100, h / 2 / 100);
+        shape.SetAsBox(w / 2, h / 2);
         body.CreateFixture(shape, 1);
 
         temp.Set(16*(Math.random()-0.5), 4.0 + 2.5);
@@ -100,8 +102,50 @@ function addImageBody(id) {
         body.SetAwake(1);
         body.SetActive(1);
 
-        body.SetUserData(1);
-        console.log(body)
+        body.SetUserData(id);
+        myBlogImages.set(id, image)
+        console.log(id + ' ' + image.width + ' ' + image.height);
     }
+}
 
+function initMyBlog(file) {
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", file, false);
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                var allText = rawFile.responseText;
+                handleJsonStr(allText);
+            }
+        }
+    }
+    rawFile.send(null);
+}
+
+
+function handleJsonStr(str) {
+    var arr = str.split("\n");
+    for (i = 0; i < arr.length; i++) {
+        if (arr[i].length <= 2) {
+            continue
+        }
+        var json = JSON.parse(arr[i]);
+        for (j = 0; j < json.length; j++) {
+            var data = json[j].object.data
+            var id = data.id
+            myBlogJson[id] = data
+            console.log(data.title);
+            addImageBody(id);
+
+            var title = data.title
+            var time = data.first_shared_at
+            var slug = data.slug
+        }
+        // if (i > 1) {
+        //     break
+        // }
+    }
 }
