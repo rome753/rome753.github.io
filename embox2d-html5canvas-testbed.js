@@ -137,9 +137,9 @@ function onMouseUp(canvas, evt) {
     if ( mouseJoint != null ) {
         if ((Date.now() - clicktime) < 150) {
             var id = mouseJoint.GetBodyB().GetUserData();
-            console.log(id);
-            console.log(myBlogImages.get(id));
-            window.open("https://www.baidu.com");
+            var slug = myBlogJson[id].slug;
+            console.log(slug);
+            window.open('https://www.jianshu.com/p/' + slug);
         }
 
         world.DestroyJoint(mouseJoint);
@@ -360,7 +360,7 @@ function step(timestamp) {
 function draw() {
     
     //black background
-    context.fillStyle = 'rgb(0,0,0)';
+    context.fillStyle = 'rgb(255,255,255)';
     context.fillRect( 0, 0, canvas.width, canvas.height );
     
     context.save();            
@@ -392,8 +392,8 @@ function draw() {
 
 function drawImage() {
     var body = world.GetBodyList();
-    for (i = 0; i < 20; i++) {
-        if (body.a == 0) {
+    while (true) {
+        if (body == null || body.a == 0) {
             break;
         }
         var id = body.GetUserData();
@@ -403,6 +403,7 @@ function drawImage() {
             var h = myBlogImages.get(id).height / myScale;
             var a = body.GetAngle();
 
+        
             // 旋转不在中心点，先平移再平移回来
             context.save();              
             context.translate(c.x, c.y);

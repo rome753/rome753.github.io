@@ -1,4 +1,4 @@
-var myScale = 110
+var myScale = 50
 var myBlogJson = JSON.parse('{}')
 var myBlogImages = new Map();
 
