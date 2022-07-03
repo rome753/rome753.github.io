@@ -1,7 +1,6 @@
-var myImageScale = 52
+var myImageScale = 50
 var myBlogJson = JSON.parse('{}')
 var myBlogImages = new Map();
-
 
 var embox2dTest_fallingImages = function() {
 }
@@ -157,7 +156,8 @@ function handleJsonStr(str) {
         }
     }
 
-    addOne()
+    allId.reverse();
+    addOne();
 }
 
 function addOne() {

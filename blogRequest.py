@@ -1,10 +1,13 @@
 from hashlib import new
+from matplotlib import fontconfig_pattern
 import requests
 import json
 import os
 from PIL import Image, ImageFont, ImageDraw
 
 jsonPath = 'blogJsonFile.txt'
+maxFontSize = 30
+createCount = 0
 
 def requestSaveFile():
     f = open(jsonPath, 'w')
@@ -29,7 +32,11 @@ def requestSaveFile():
     if hasClose == False:
         f.close()
 
+
 def parseFile():
+    # previewImage('iOS东方丽景大富科技看点击发剪短发')
+    # return
+
     if os.path.exists('images') == False:
         os.mkdir('images')
     f = open(jsonPath, 'r')
@@ -57,16 +64,53 @@ def parseFile():
 # print(jo[0]['object']['data'])
 
 
-def createImage(fpath, text):
+def previewImage(text):
     fontSize = 30
     fontPath = '/Library/Fonts/Arial Unicode.ttf'
     font = ImageFont.truetype(fontPath, fontSize)
     textSize = font.getsize(text)
     
+    fontColor = '#000000'
+    if (text.startswith('Android')):
+        fontColor = '#009933'
+    if (text.startswith('iOS')):
+        fontColor = '#996633'
+    if (text.startswith('FFmpeg')):
+        fontColor = '#6600cc'
+    if (text.startswith('OpenCV')):
+        fontColor = '#993399'
+
     im = Image.new("RGB", textSize, (255,255,255))
     dr = ImageDraw.Draw(im)
 
-    dr.text((0, 0), text, font=font, fill='#000000')
+    dr.text((0, 0), text, font=font, fill=fontColor)
+    im.show()
+
+
+def createImage(fpath, text):
+    global createCount
+    fontSize = maxFontSize - int(createCount / 10)
+    if (fontSize < 25):
+        fontSize = 25
+    createCount += 1
+    fontPath = '/Library/Fonts/Arial Unicode.ttf'
+    font = ImageFont.truetype(fontPath, fontSize)
+    textSize = font.getsize(text)
+    
+    fontColor = '#000000'
+    if (text.startswith('Android')):
+        fontColor = '#009933'
+    if (text.startswith('iOS')):
+        fontColor = '#996633'
+    if (text.startswith('FFmpeg')):
+        fontColor = '#6600cc'
+    if (text.startswith('OpenCV')):
+        fontColor = '#993399'
+
+    im = Image.new("RGB", textSize, (255,255,255))
+    dr = ImageDraw.Draw(im)
+
+    dr.text((0, 0), text, font=font, fill=fontColor)
     im.save(fpath)
 
 
