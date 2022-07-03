@@ -119,7 +119,7 @@ def createImage(fpath, text):
     im = Image.new("RGBA", [w, h], (255,255,255,0))
     dr = ImageDraw.Draw(im)
 
-    dr.rounded_rectangle(xy=[0,0,w,h], radius=8, fill='#eeeeee', outline='#ffffff', width=2)
+    dr.rounded_rectangle(xy=[0,0,w,h], radius=8, fill='#ffffff', outline='#dddddd', width=2)
     dr.text((pd, pd), text, font=font, fill=fontColor)
     im.save(fpath)
 
