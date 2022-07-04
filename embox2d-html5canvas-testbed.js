@@ -122,6 +122,8 @@ function startMouseJoint() {
 }
 
 var clicktime = 0;
+var clickx = 0;
+var clicky = 0;
 
 function onMouseDown(canvas, evt) {            
     updateMousePos(canvas, evt);
@@ -131,6 +133,8 @@ function onMouseDown(canvas, evt) {
     updateStats();
 
     clicktime = Date.now();
+    clickx = evt.clientX;
+    clicky = evt.clientY
 }
 
 function onMouseUp(canvas, evt) {
@@ -138,7 +142,10 @@ function onMouseUp(canvas, evt) {
     updateMousePos(canvas, evt);
     updateStats();
     if ( mouseJoint != null ) {
-        if ((Date.now() - clicktime) < 150) {
+        var dx = evt.clientX - clickx;
+        var dy = evt.clientY - clicky;
+        var dis = dx * dx + dy * dy;
+        if ((Date.now() - clicktime) < 150 && dis < 10) {
             var id = mouseJoint.GetBodyB().GetUserData();
             if (id == 753) {
                 window.open('https://github.com/rome753');
