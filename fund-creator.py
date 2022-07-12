@@ -11,7 +11,7 @@ for f in list:
     if f.endswith('.png'):
         s = '''<h4 align="center">%s</h4>
         <a>
-            <img src="sel/%s" width:1200 height:600 />
+            <img src="sel/%s"/>
         </a>
         ''' % (f,f)
         str += s
