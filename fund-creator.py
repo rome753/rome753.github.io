@@ -10,7 +10,7 @@ str = ''
 for f in list:
     if f.endswith('.png'):
         s = '''<a>
-            <img src="sel/%s" />
+            <img src="sel/%s" width:1200 height:600 />
         </a>
         ''' % f
         str += s
