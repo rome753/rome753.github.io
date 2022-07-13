@@ -9,11 +9,10 @@ list.sort()
 str = ''
 for f in list:
     if f.endswith('.png'):
-        s = '''<h4 align="center">%s</h4>
-        <a>
+        s = '''<a>
             <img src="sel/%s"/>
         </a>
-        ''' % (f,f)
+        ''' % f
         str += s
 
 html = '''
