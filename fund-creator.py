@@ -25,7 +25,7 @@ html = '''
   </head>
   <body>
     <ul>
-      <li>
+      <li align="center">
         %s
       </li>
     </ul>
