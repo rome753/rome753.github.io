@@ -5,7 +5,7 @@ import json
 import os
 from PIL import Image, ImageFont, ImageDraw
 
-jsonPath = 'blogJsonFile.txt'
+jsonPath = 'blogJson.txt'
 maxFontSize = 30
 createCount = 0
 
@@ -34,12 +34,10 @@ def requestSaveFile():
 
 
 def parseFile():
-    # previewImage('iOS东方丽景大富科技看点击发剪短发')
-    # return
-
     if os.path.exists('images') == False:
         os.mkdir('images')
     f = open(jsonPath, 'r')
+    info = []
     for line in f:
         jo = json.loads(line)
         if (len(jo) == 0):
@@ -47,6 +45,7 @@ def parseFile():
         for obj in jo:
             data = obj['object']['data']
             id = data['id']
+            slug = data['slug']
             title = data['title']
             print(data['title'])
 
@@ -55,7 +54,27 @@ def parseFile():
                 os.remove(fpath)
             createImage(fpath, title)
 
+            d = {
+                'id': id,
+                'path': fpath,
+                'link': 'https://www.jianshu.com/p/%s' % slug
+            }
+            info.append(d)
+
         # print(jo[0]['object']['data'])
+    f.close()
+
+
+    d = {
+        'id': 753,
+        'path': 'images/753.png',
+        'link': 'https://github.com/rome753'
+    }
+    info.append(d)
+    # info['753'] = {'url': 'https://github.com/rome753'}
+    f = open('images/json.txt', 'w')
+    f.write(json.dumps(info))
+    f.close()
 
 # url = 'https://www.jianshu.com/asimov/users/slug/6740854c6174/public_notes?order_by=shared_at&page=10'
 # r = requests.get(url, headers=headers)

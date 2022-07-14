@@ -1,6 +1,6 @@
 var myImageScale = 60
-var myBlogJson = JSON.parse('{}')
-var myBlogImages = new Map();
+var myBlogJson = {}
+var myBlogImages = new Map(); // 图片缓存
 
 var embox2dTest_fallingImages = function() {
 }
@@ -75,12 +75,12 @@ embox2dTest_fallingImages.prototype.setup = function() {
     //     groundBody.CreateFixture(chainShape, 0.0);
     // }
 
-    initMyBlog('blogJsonFile.txt')
+    initMyBlog('images/json.txt')
 }
 
 function addImageBody(id) {
     var image = new Image()
-    image.src = 'images/' + id + '.png'
+    image.src = myBlogJson[id]['path']
     image.onload = function() {
         var w = image.width / myImageScale
         var h = image.height / myImageScale
@@ -98,7 +98,6 @@ function addImageBody(id) {
             console.log(shape);
             shape.set_m_radius(w / 2);
             body.CreateFixture(shape, 1);
-
         } else {
             var shape = new b2PolygonShape();
             shape.SetAsBox(w / 2, h / 2);
@@ -134,41 +133,47 @@ function initMyBlog(file) {
     rawFile.send(null);
 }
 
-
 function handleJsonStr(str) {
-    var arr = str.split("\n");
-    for (i = 0; i < arr.length; i++) {
-        if (arr[i].length <= 2) {
-            continue;
-        }
-        var json = JSON.parse(arr[i]);
-        for (j = 0; j < json.length; j++) {
-            var data = json[j].object.data;
-            var id = data.id;
-            allId.push(id);
-            myBlogJson[id] = data;
-            console.log(data.title);
-            // addImageBody(id);
-
-            // var title = data.title
-            // var time = data.first_shared_at
-            // var slug = data.slug
-        }
+    var json = JSON.parse(str);
+    for (i = 0; i < json.length; i++) {
+        var data = json[i];
+        var id = data['id']
+        allId.push(id);
+        myBlogJson[id] = data
     }
 
-    allId.reverse();
+    // allId.reverse();
     addOne();
 }
+
+// function handleJsonStr(str) {
+//     var arr = str.split("\n");
+//     for (i = 0; i < arr.length; i++) {
+//         if (arr[i].length <= 2) {
+//             continue;
+//         }
+//         var json = JSON.parse(arr[i]);
+//         for (j = 0; j < json.length; j++) {
+//             var data = json[j].object.data;
+//             var id = data.id;
+//             allId.push(id);
+//             myBlogJson[id] = data;
+//             console.log(data.title);
+//         }
+//     }
+
+//     allId.reverse();
+//     addOne();
+// }
 
 function addOne() {
     if (allIdIndex < allId.length) {
         var id = allId[allIdIndex++];
         addImageBody(id);
+        console.log(id);
         setTimeout(() => {
             addOne();
         }, 100);
-    } else {
-        addImageBody(753)
     }
 }
 
