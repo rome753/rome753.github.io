@@ -396,7 +396,7 @@ function drawScene(gl, programInfo, buffers, texture, deltaTime) {
 
 
           const modelViewMatrix = mat4.create();
-          var mul = 0.212
+          var mul = 0.214
           mat4.translate(modelViewMatrix,     // destination matrix
             modelViewMatrix,     // matrix to translate
             [c.x * mul, c.y * mul, -6.0]);  // amount to translate
