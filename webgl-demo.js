@@ -90,7 +90,7 @@ function main() {
   const buffers = initBuffers(gl);
 
 //   const texture = loadTexture(gl, 'cubetexture.png');
-  const texture = loadTexture(gl, 'images/16491515.png');
+  const texture = loadTexture(gl, 'images/16491254.png');
 
 
   var then = 0;
@@ -157,7 +157,10 @@ function initBuffers(gl) {
   // Now create an array of positions for the cube.
 
 //   const positions = createPos(1,1,1);
-  const positions = createPos(0.5,1.82,0.5);
+
+  var off = 0.002
+  
+  const positions = createPos(282 * off, 94 * off, 94 * off);
 
   // Now pass the list of positions into WebGL to build the
   // shape. We do this by creating a Float32Array from the
@@ -218,25 +221,25 @@ function initBuffers(gl) {
 
   const textureCoordinates = [
     // Front
-    0.0,  0.0,
     0.0,  1.0,
     1.0,  1.0,
     1.0,  0.0,
+    0.0,  0.0,
     // Back
+    0.0,  0.0,
     0.0,  1.0,
     1.0,  1.0,
     1.0,  0.0,
-    0.0,  0.0,
     // Top
     0.0,  0.0,
-    1.0,  0.0,
-    1.0,  1.0,
     0.0,  1.0,
+    1.0,  1.0,
+    1.0,  0.0,
     // Bottom
-    0.0,  0.0,
-    1.0,  0.0,
-    1.0,  1.0,
     0.0,  1.0,
+    1.0,  1.0,
+    1.0,  0.0,
+    0.0,  0.0,
     // Right
     0.0,  1.0,
     1.0,  1.0,
@@ -376,20 +379,57 @@ function drawScene(gl, programInfo, buffers, texture, deltaTime) {
   // the center of the scene.
   const modelViewMatrix = mat4.create();
 
+  if (world == null) {
+    return
+  }
+  var body = world.GetBodyList();
+  while (true) {
+      if (body == null || body.a == 0) {
+          break;
+      }
+      var id = body.GetUserData();
+      if (id > 0) {
+          var c = body.GetWorldCenter();
+          var w = myBlogImages.get(id).width / myImageScale;
+          var h = myBlogImages.get(id).height / myImageScale;
+          var a = body.GetAngle();
+
+          var mul = 0.2
+          mat4.translate(modelViewMatrix,     // destination matrix
+            modelViewMatrix,     // matrix to translate
+            [c.x * mul, c.y * mul, -6.0]);  // amount to translate
+
+          mat4.rotate(modelViewMatrix,  // destination matrix
+                    modelViewMatrix,  // matrix to rotate
+                    a,     // amount to rotate in radians
+                    [0, 0, 1]);       // axis to rotate around (Z)
+
+          drawOne(gl, programInfo, buffers, texture, deltaTime, projectionMatrix, modelViewMatrix, i)
+
+      }
+      body = body.GetNext();
+  }
+  // Update the rotation for the next draw
+
+  cubeRotation += deltaTime;
+}
+
+
+function drawOne(gl, programInfo, buffers, texture, deltaTime, projectionMatrix, modelViewMatrix) {
   // Now move the drawing position a bit to where we want to
   // start drawing the square.
 
-  mat4.translate(modelViewMatrix,     // destination matrix
-                 modelViewMatrix,     // matrix to translate
-                 [-0.0, 0.0, -6.0]);  // amount to translate
-  mat4.rotate(modelViewMatrix,  // destination matrix
-              modelViewMatrix,  // matrix to rotate
-              cubeRotation,     // amount to rotate in radians
-              [0, 0, 1]);       // axis to rotate around (Z)
-  mat4.rotate(modelViewMatrix,  // destination matrix
-              modelViewMatrix,  // matrix to rotate
-              cubeRotation * .7,// amount to rotate in radians
-              [0, 1, 0]);       // axis to rotate around (X)
+  // mat4.translate(modelViewMatrix,     // destination matrix
+  //               modelViewMatrix,     // matrix to translate
+  //               [-i, 0.0, -6.0]);  // amount to translate
+  // mat4.rotate(modelViewMatrix,  // destination matrix
+  //             modelViewMatrix,  // matrix to rotate
+  //             cubeRotation,     // amount to rotate in radians
+  //             [0, 0, 1]);       // axis to rotate around (Z)
+  // mat4.rotate(modelViewMatrix,  // destination matrix
+  //             modelViewMatrix,  // matrix to rotate
+  //             cubeRotation * .7,// amount to rotate in radians
+  //             [0, 1, 0]);       // axis to rotate around (X)
 
   const normalMatrix = mat4.create();
   mat4.invert(normalMatrix, modelViewMatrix);
@@ -495,9 +535,7 @@ function drawScene(gl, programInfo, buffers, texture, deltaTime) {
     gl.drawElements(gl.TRIANGLES, vertexCount, type, offset);
   }
 
-  // Update the rotation for the next draw
 
-  cubeRotation += deltaTime;
 }
 
 //
