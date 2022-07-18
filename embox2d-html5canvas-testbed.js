@@ -147,13 +147,9 @@ function onMouseUp(canvas, evt) {
         var dis = dx * dx + dy * dy;
         if ((Date.now() - clicktime) < 150 && dis < 10) {
             var id = mouseJoint.GetBodyB().GetUserData();
-            if (id == 753) {
-                window.open('https://github.com/rome753');
-            } else {
-                var slug = myBlogJson[id].slug;
-                console.log(slug);
-                window.open('https://www.jianshu.com/p/' + slug);
-            }
+            var link = myBlogJson[id]['link']
+            window.open(link);
+            console.log(link);
         }
 
         world.DestroyJoint(mouseJoint);
@@ -431,9 +427,6 @@ function drawImage() {
         body = body.GetNext();
     }
 }
-
-var image = new Image();
-image.src = 'fly.png';
 
 function updateStats() {
     if ( ! showStats )

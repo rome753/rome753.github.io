@@ -1,69 +1,47 @@
-from hashlib import new
 from matplotlib import fontconfig_pattern
 import requests
 import json
 import os
 from PIL import Image, ImageFont, ImageDraw
 
-jsonPath = 'blogJson.txt'
-maxFontSize = 30
-createCount = 0
 
-def requestSaveFile():
-    f = open(jsonPath, 'w')
-    headers = {
-        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"    
-    }
-    hasClose = False
-    for i in range(1, 20):
-        url = 'https://www.jianshu.com/asimov/users/slug/6740854c6174/public_notes?shared_at=top&page=%d' % i
-        r = requests.get(url, headers=headers)
-        jo = json.loads(r.content)
-        f.write(r.text)
-        f.write('\n')
-        print("write page: %d" % i)
-        if (len(jo) == 0):
-            print("close file")
-            f.close()
-            hasClose = True
-            break
-        # print(jo[0]['object']['data'])
-        # print(i)
-    if hasClose == False:
-        f.close()
+fontSize = 30
+fontPath = '/Library/Fonts/Arial Unicode.ttf'
+font = ImageFont.truetype(fontPath, fontSize)
 
+headers = {
+    "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"    
+}
 
 def parseFile():
     if os.path.exists('images') == False:
         os.mkdir('images')
-    f = open(jsonPath, 'r')
+    f = open('cnblog.txt', 'r')
     info = []
+    i = 0
+    id = 0
     for line in f:
-        jo = json.loads(line)
-        if (len(jo) == 0):
-            break
-        for obj in jo:
-            data = obj['object']['data']
-            id = data['id']
-            slug = data['slug']
-            title = data['title']
-            print(data['title'])
-
+        i += 1
+        if i == 1:
+            id = int(line[4:])
+        if i == 2:
+            i = 0
+            title = line
+            print(title)
             fpath = 'images/%s.png' % id
             if os.path.exists(fpath):
                 os.remove(fpath)
-            createImage(fpath, title)
+            im = createImage(title)
+            im.save(fpath)
 
             d = {
                 'id': id,
                 'path': fpath,
-                'link': 'https://www.jianshu.com/p/%s' % slug
+                'link': 'https://www.cnblogs.com/rome753/p/%d.html' % id
             }
             info.append(d)
 
-        # print(jo[0]['object']['data'])
     f.close()
-
 
     d = {
         'id': 753,
@@ -71,59 +49,36 @@ def parseFile():
         'link': 'https://github.com/rome753'
     }
     info.append(d)
-    # info['753'] = {'url': 'https://github.com/rome753'}
     f = open('images/json.txt', 'w')
     f.write(json.dumps(info))
     f.close()
 
-# url = 'https://www.jianshu.com/asimov/users/slug/6740854c6174/public_notes?order_by=shared_at&page=10'
-# r = requests.get(url, headers=headers)
-# jo = json.loads(r.content)
-# print(jo)
-# print(jo[0]['object']['data'])
+
+def findHalfWidth(text):
+    w = font.getsize(text)[0]
+    for i in range(0, 1000):
+        t = text[:i]
+        if font.getsize(t)[0] > w / 2:
+            return i
+    return 0
 
 
-def previewImage(text):
-    fontSize = 30
-    fontPath = '/Library/Fonts/Arial Unicode.ttf'
-    font = ImageFont.truetype(fontPath, fontSize)
-    textSize = font.getsize(text)
+def createImage(text):
+    half = findHalfWidth(text)
+    text1 = text[:half]
+    text2 = text[half:]
+
+    textSize1 = font.getsize(text1)
+    textSize2 = font.getsize(text2)
     
     pd = 10
-    w = textSize[0] + pd + pd
-    h = textSize[1] + pd + pd
+    w1 = textSize1[0]
+    h1 = textSize1[1]
+    w2 = textSize2[0]
+    h2 = textSize2[1]
 
-    fontColor = '#000000'
-    if (text.startswith('Android')):
-        fontColor = '#009933'
-    if (text.startswith('iOS')):
-        fontColor = '#996633'
-    if (text.startswith('FFmpeg')):
-        fontColor = '#6600cc'
-    if (text.startswith('OpenCV')):
-        fontColor = '#993399'
-
-    im = Image.new("RGBA", [w, h], (255,255,255,0))
-    dr = ImageDraw.Draw(im)
-
-    dr.rounded_rectangle(xy=[0,0,w,h], radius=8, fill='#cccccc')
-    dr.text((pd, pd), text, font=font, fill=fontColor)
-    im.show()
-
-
-def createImage(fpath, text):
-    global createCount
-    fontSize = maxFontSize - int(createCount / 10)
-    if (fontSize < 25):
-        fontSize = 25
-    createCount += 1
-    fontPath = '/Library/Fonts/Arial Unicode.ttf'
-    font = ImageFont.truetype(fontPath, fontSize)
-    textSize = font.getsize(text)
-    
-    pd = 10
-    w = textSize[0] + pd + pd
-    h = textSize[1] + pd + pd
+    w = pd + max(w1, w2) + pd
+    h = pd + h1 + h2 + pd
 
     fontColor = '#000000'
     if (text.startswith('Android')):
@@ -139,11 +94,25 @@ def createImage(fpath, text):
     dr = ImageDraw.Draw(im)
 
     dr.rounded_rectangle(xy=[0,0,w,h], radius=8, fill='#ffffff', outline='#dddddd', width=2)
-    dr.text((pd, pd), text, font=font, fill=fontColor)
-    im.save(fpath)
+    dr.text((pd, pd), text1, font=font, fill=fontColor)
+    dr.text((pd, pd + h1), text2, font=font, fill=fontColor)
+    # im.show()
+    return im
 
 
-
-if os.path.exists(jsonPath) == False:
-    requestSaveFile()
+# if os.path.exists(jsonPath) == False:
+#     requestSaveFile()
 parseFile()
+
+
+
+
+def downloadImage(url, name):
+    path = 'cdn/%s' % name
+    r = requests.get(url, headers=headers)
+    with open(path, 'wb') as f:
+        f.write(r.content)
+
+
+
+# createImage('Android ios这是测试134加肥加大')
