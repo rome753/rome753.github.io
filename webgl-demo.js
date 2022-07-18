@@ -89,7 +89,9 @@ function main() {
   // objects we'll be drawing.
   const buffers = initBuffers(gl);
 
-  const texture = loadTexture(gl, 'cubetexture.png');
+//   const texture = loadTexture(gl, 'cubetexture.png');
+  const texture = loadTexture(gl, 'images/16491515.png');
+
 
   var then = 0;
 
@@ -154,7 +156,8 @@ function initBuffers(gl) {
 
   // Now create an array of positions for the cube.
 
-  const positions = createPos(1,1,1);
+//   const positions = createPos(1,1,1);
+  const positions = createPos(0.5,1.82,0.5);
 
   // Now pass the list of positions into WebGL to build the
   // shape. We do this by creating a Float32Array from the
@@ -216,14 +219,14 @@ function initBuffers(gl) {
   const textureCoordinates = [
     // Front
     0.0,  0.0,
-    1.0,  0.0,
-    1.0,  1.0,
     0.0,  1.0,
+    1.0,  1.0,
+    1.0,  0.0,
     // Back
-    0.0,  0.0,
-    1.0,  0.0,
-    1.0,  1.0,
     0.0,  1.0,
+    1.0,  1.0,
+    1.0,  0.0,
+    0.0,  0.0,
     // Top
     0.0,  0.0,
     1.0,  0.0,
@@ -235,15 +238,15 @@ function initBuffers(gl) {
     1.0,  1.0,
     0.0,  1.0,
     // Right
-    0.0,  0.0,
-    1.0,  0.0,
-    1.0,  1.0,
     0.0,  1.0,
+    1.0,  1.0,
+    1.0,  0.0,
+    0.0,  0.0,
     // Left
     0.0,  0.0,
-    1.0,  0.0,
-    1.0,  1.0,
     0.0,  1.0,
+    1.0,  1.0,
+    1.0,  0.0,
   ];
 
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates),
