@@ -1,4 +1,4 @@
-var myImageScale = 60
+var myImageScale = 70 // 图片缩小倍数
 var myBlogJson = {}
 var myBlogImages = new Map(); // 图片缓存
 
@@ -142,29 +142,8 @@ function handleJsonStr(str) {
         myBlogJson[id] = data
     }
 
-    // allId.reverse();
     addOne();
 }
-
-// function handleJsonStr(str) {
-//     var arr = str.split("\n");
-//     for (i = 0; i < arr.length; i++) {
-//         if (arr[i].length <= 2) {
-//             continue;
-//         }
-//         var json = JSON.parse(arr[i]);
-//         for (j = 0; j < json.length; j++) {
-//             var data = json[j].object.data;
-//             var id = data.id;
-//             allId.push(id);
-//             myBlogJson[id] = data;
-//             console.log(data.title);
-//         }
-//     }
-
-//     allId.reverse();
-//     addOne();
-// }
 
 function addOne() {
     if (allIdIndex < allId.length) {
@@ -173,7 +152,7 @@ function addOne() {
         console.log(id);
         setTimeout(() => {
             addOne();
-        }, 100);
+        }, 50);
     }
 }
 

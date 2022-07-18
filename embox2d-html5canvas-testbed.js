@@ -413,11 +413,22 @@ function drawImage() {
             var h = myBlogImages.get(id).height / myImageScale;
             var a = body.GetAngle();
 
-        
             // 旋转不在中心点，先平移再平移回来
             context.save();              
             context.translate(c.x, c.y);
-            context.scale(1,-1);  
+
+            var isCircle = body.GetFixtureList().GetShape().m_type == 0
+            // 判断是否文字倒了，把图片翻过来
+            var degree = a * 180 / Math.PI
+            if (degree < 0) {
+                degree = (degree + 360 * 10000) % 360
+            }
+            var isUpDown = degree > (90 + 10) && degree < (270 - 10)
+            if (!isCircle && isUpDown) {
+                context.scale(-1,1);  
+            } else {
+                context.scale(1,-1);  
+            }
             context.rotate(-a);
             context.translate(-c.x, -c.y);
             var image = myBlogImages.get(id)
