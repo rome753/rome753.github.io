@@ -23,7 +23,7 @@ def parseFile():
     for line in f:
         i += 1
         if i == 1:
-            id = int(line[4:])
+            id = int(line)
         if i == 2:
             i = 0
             title = line

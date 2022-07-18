@@ -1,5 +1,8 @@
 var cubeRotation = 0.0;
 
+var myBlogTexs = new Map(); // 图片缓存
+
+
 main();
 
 //
@@ -87,7 +90,7 @@ function main() {
 
   // Here's where we call the routine that builds all the
   // objects we'll be drawing.
-  const buffers = initBuffers(gl);
+  const buffers = initBuffers(gl, 0.2, 0.1);
 
 //   const texture = loadTexture(gl, 'cubetexture.png');
   const texture = loadTexture(gl, 'images/16491254.png');
@@ -143,7 +146,7 @@ function createPos(x,y,z) {
 // Initialize the buffers we'll need. For this demo, we just
 // have one object -- a simple three-dimensional cube.
 //
-function initBuffers(gl) {
+function initBuffers(gl, w, h) {
 
   // Create a buffer for the cube's vertex positions.
 
@@ -157,10 +160,8 @@ function initBuffers(gl) {
   // Now create an array of positions for the cube.
 
 //   const positions = createPos(1,1,1);
-
-  var off = 0.002
   
-  const positions = createPos(282 * off, 94 * off, 94 * off);
+  var positions = createPos(w, h, h);
 
   // Now pass the list of positions into WebGL to build the
   // shape. We do this by creating a Float32Array from the
@@ -377,7 +378,6 @@ function drawScene(gl, programInfo, buffers, texture, deltaTime) {
 
   // Set the drawing position to the "identity" point, which is
   // the center of the scene.
-  const modelViewMatrix = mat4.create();
 
   if (world == null) {
     return
@@ -394,7 +394,9 @@ function drawScene(gl, programInfo, buffers, texture, deltaTime) {
           var h = myBlogImages.get(id).height / myImageScale;
           var a = body.GetAngle();
 
-          var mul = 0.2
+
+          const modelViewMatrix = mat4.create();
+          var mul = 0.212
           mat4.translate(modelViewMatrix,     // destination matrix
             modelViewMatrix,     // matrix to translate
             [c.x * mul, c.y * mul, -6.0]);  // amount to translate
@@ -404,6 +406,14 @@ function drawScene(gl, programInfo, buffers, texture, deltaTime) {
                     a,     // amount to rotate in radians
                     [0, 0, 1]);       // axis to rotate around (Z)
 
+          mul = 0.0015
+          var buffers = initBuffers(gl, myBlogImages.get(id).width * mul, myBlogImages.get(id).height * mul)
+          var texture = myBlogTexs.get(id);        
+          if (texture == null) {
+            var url = myBlogJson[id]['path']
+            texture = loadTexture(gl, url)
+            myBlogTexs.set(id, texture)
+          }
           drawOne(gl, programInfo, buffers, texture, deltaTime, projectionMatrix, modelViewMatrix, i)
 
       }
