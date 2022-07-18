@@ -1,6 +1,11 @@
 var cubeRotation = 0.0;
 
-var myBlogTexs = new Map(); // 图片缓存
+var myCacheMap = new Map();
+
+class MyCache {
+  tex;
+  buffers;
+}
 
 
 main();
@@ -407,14 +412,14 @@ function drawScene(gl, programInfo, buffers, texture, deltaTime) {
                     [0, 0, 1]);       // axis to rotate around (Z)
 
           mul = 0.0015
-          var buffers = initBuffers(gl, myBlogImages.get(id).width * mul, myBlogImages.get(id).height * mul)
-          var texture = myBlogTexs.get(id);        
-          if (texture == null) {
-            var url = myBlogJson[id]['path']
-            texture = loadTexture(gl, url)
-            myBlogTexs.set(id, texture)
+          var myCache = myCacheMap.get(id);
+          if (myCache == null) {
+            myCache = new MyCache()
+            myCache.tex = loadTexture(gl, myBlogJson[id]['path'])
+            myCache.buffers = initBuffers(gl, myBlogImages.get(id).width * mul, myBlogImages.get(id).height * mul)
+            myCacheMap.set(id, myCache)
           }
-          drawOne(gl, programInfo, buffers, texture, deltaTime, projectionMatrix, modelViewMatrix, i)
+          drawOne(gl, programInfo, myCache.buffers, myCache.tex, deltaTime, projectionMatrix, modelViewMatrix, i)
 
       }
       body = body.GetNext();
