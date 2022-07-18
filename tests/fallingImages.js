@@ -93,7 +93,8 @@ function addImageBody(id) {
         var body = world.CreateBody(bd);
         var randomValue = Math.random();
 
-        if (id == 753) {
+        if (id == 0) {
+        // if (id == 753) {
             var shape = new b2CircleShape();
             console.log(shape);
             shape.set_m_radius(w / 2);

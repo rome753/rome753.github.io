@@ -46,7 +46,7 @@ function main() {
 
       highp vec3 ambientLight = vec3(0.3, 0.3, 0.3);
       highp vec3 directionalLightColor = vec3(1, 1, 1);
-      highp vec3 directionalVector = normalize(vec3(0.85, 0.8, 0.75));
+      highp vec3 directionalVector = normalize(vec3(0.85, 0.5, 1.15));
 
       highp vec4 transformedNormal = uNormalMatrix * vec4(aVertexNormal, 1.0);
 
@@ -65,7 +65,6 @@ function main() {
 
     void main(void) {
       highp vec4 texelColor = texture2D(uSampler, vTextureCoord);
-
       gl_FragColor = vec4(texelColor.rgb * vLighting, texelColor.a);
     }
   `;
@@ -313,7 +312,7 @@ function loadTexture(gl, url) {
   const border = 0;
   const srcFormat = gl.RGBA;
   const srcType = gl.UNSIGNED_BYTE;
-  const pixel = new Uint8Array([0, 0, 255, 255]);  // opaque blue
+  const pixel = new Uint8Array([0, 0, 0, 0]);  // opaque blue
   gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
                 width, height, border, srcFormat, srcType,
                 pixel);
@@ -355,7 +354,8 @@ function drawScene(gl, programInfo, buffers, texture, deltaTime) {
   gl.clearDepth(1.0);                 // Clear everything
   gl.enable(gl.DEPTH_TEST);           // Enable depth testing
   gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
-
+  // gl.enable(gl.BLEND);
+  // gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
   // Clear the canvas before we start drawing on it.
 
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
