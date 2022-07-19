@@ -1,4 +1,4 @@
-var myImageScale = 70 // 图片缩小倍数
+var myBlogScale = 1 / PTM * 0.52 // 图片像素跟body比例倍数
 var myBlogJson = {}
 var myBlogImages = new Map(); // 图片缓存
 
@@ -82,8 +82,8 @@ function addImageBody(id) {
     var image = new Image()
     image.src = myBlogJson[id]['path']
     image.onload = function() {
-        var w = image.width / myImageScale
-        var h = image.height / myImageScale
+        var w = image.width * myBlogScale
+        var h = image.height * myBlogScale
         var ZERO = new b2Vec2(0, 0);
         var temp = new b2Vec2(0, 0);
         var bd = new b2BodyDef();

@@ -5,7 +5,7 @@ import os
 from PIL import Image, ImageFont, ImageDraw
 
 
-fontSize = 30
+fontSize = 25
 fontPath = '/Library/Fonts/Arial Unicode.ttf'
 font = ImageFont.truetype(fontPath, fontSize)
 
@@ -31,7 +31,7 @@ def parseFile():
             fpath = 'images/%s.png' % id
             if os.path.exists(fpath):
                 os.remove(fpath)
-            im = createImage(title)
+            im = createImage(False, title)
             im.save(fpath)
 
             d = {
@@ -63,7 +63,7 @@ def findHalfWidth(text):
     return 0
 
 
-def createImage(text):
+def createImage(isShow, text):
     half = findHalfWidth(text)
     text1 = text[:half]
     text2 = text[half:]
@@ -93,16 +93,20 @@ def createImage(text):
     im = Image.new("RGBA", [w, h], (255,255,255,0))
     dr = ImageDraw.Draw(im)
 
-    dr.rounded_rectangle(xy=[0,0,w,h], radius=0, fill='#ffffff', outline='#dddddd', width=2)
+    # dr.rounded_rectangle(xy=[0,0,w,h], radius=0, fill='#ffffff', outline='#dddddd', width=2)
+    dr.rounded_rectangle(xy=[0,0,w,h], radius=0, fill='#ffffff')
     dr.text((pd, pd), text1, font=font, fill=fontColor)
     dr.text((pd, pd + h1), text2, font=font, fill=fontColor)
-    # im.show()
+    if isShow:
+        im.show()
     return im
 
 
 # if os.path.exists(jsonPath) == False:
 #     requestSaveFile()
 parseFile()
+
+# createImage(True, 'Android ios这是测试134加肥加大')
 
 
 
@@ -113,6 +117,3 @@ def downloadImage(url, name):
     with open(path, 'wb') as f:
         f.write(r.content)
 
-
-
-# createImage('Android ios这是测试134加肥加大')
