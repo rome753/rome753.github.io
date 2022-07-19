@@ -421,7 +421,7 @@ function drawScene(gl, programInfo, deltaTime) {
                     a,     // amount to rotate in radians
                     [0, 0, 1]);       // axis to rotate around (Z)
 
-          mul = 0.0015
+          mul = myBlogScale * 0.106
           var myCache = myCacheMap.get(id);
           if (myCache == null) {
             myCache = new MyCache()

@@ -1,4 +1,4 @@
-var myBlogScale = 1 / PTM * 0.52 // 图片像素跟body比例倍数
+var myBlogScale = 1 / PTM * 0.54 // 图片像素跟body比例倍数
 var myBlogJson = {}
 var myBlogImages = new Map(); // 图片缓存
 

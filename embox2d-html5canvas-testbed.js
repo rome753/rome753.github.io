@@ -5,10 +5,10 @@ var e_pairBit = 0x0008;
 var e_centerOfMassBit = 0x0010;
 
 var PTM = 32;
-var CW = 1080;
+var CW = 1280;
 var CH = 720;
 var hideDebugDiv = true; // 隐藏调试面板
-var hideCanvas = true;   // 隐藏canvas，用glcanvas接收事件
+var hideCanvas = false;   // 隐藏canvas，用glcanvas接收事件
 
 var world = null;
 var mouseJointGroundBody;
