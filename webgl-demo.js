@@ -92,14 +92,6 @@ function main() {
     }
   };
 
-  // Here's where we call the routine that builds all the
-  // objects we'll be drawing.
-  const buffers = initBuffers(gl, 0.2, 0.1);
-
-//   const texture = loadTexture(gl, 'cubetexture.png');
-  const texture = loadTexture(gl, 'images/16491254.png');
-
-
   var then = 0;
 
   // Draw the scene repeatedly
@@ -108,12 +100,15 @@ function main() {
     const deltaTime = now - then;
     then = now;
 
-    drawScene(gl, programInfo, buffers, texture, deltaTime);
+    drawScene(gl, programInfo, deltaTime);
 
     requestAnimationFrame(render);
   }
   requestAnimationFrame(render);
 }
+
+var groundImage = new Image();
+groundImage.src = 'cubetexture.png'
 
 function createPos(x,y,z) {
   return positions = [
@@ -296,7 +291,7 @@ function initBuffers(gl, w, h) {
 // Initialize a texture and load an image.
 // When the image finished loading copy it into the texture.
 //
-function loadTexture(gl, url) {
+function loadTexture(gl, image, w, h) {
   const texture = gl.createTexture();
   gl.bindTexture(gl.TEXTURE_2D, texture);
 
@@ -307,8 +302,8 @@ function loadTexture(gl, url) {
   // we'll update the texture with the contents of the image.
   const level = 0;
   const internalFormat = gl.RGBA;
-  const width = 1;
-  const height = 1;
+  const width = w;
+  const height = h;
   const border = 0;
   const srcFormat = gl.RGBA;
   const srcType = gl.UNSIGNED_BYTE;
@@ -317,27 +312,24 @@ function loadTexture(gl, url) {
                 width, height, border, srcFormat, srcType,
                 pixel);
 
-  const image = new Image();
-  image.onload = function() {
-    gl.bindTexture(gl.TEXTURE_2D, texture);
-    gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
-                  srcFormat, srcType, image);
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
+                srcFormat, srcType, image);
 
-    // WebGL1 has different requirements for power of 2 images
-    // vs non power of 2 images so check if the image is a
-    // power of 2 in both dimensions.
-    if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
-       // Yes, it's a power of 2. Generate mips.
-       gl.generateMipmap(gl.TEXTURE_2D);
-    } else {
-       // No, it's not a power of 2. Turn of mips and set
-       // wrapping to clamp to edge
-       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-    }
-  };
-  image.src = url;
+  // WebGL1 has different requirements for power of 2 images
+  // vs non power of 2 images so check if the image is a
+  // power of 2 in both dimensions.
+  if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
+      // Yes, it's a power of 2. Generate mips.
+      gl.generateMipmap(gl.TEXTURE_2D);
+  } else {
+      // No, it's not a power of 2. Turn of mips and set
+      // wrapping to clamp to edge
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  }
 
   return texture;
 }
@@ -349,7 +341,7 @@ function isPowerOf2(value) {
 //
 // Draw the scene.
 //
-function drawScene(gl, programInfo, buffers, texture, deltaTime) {
+function drawScene(gl, programInfo, deltaTime) {
   gl.clearColor(0.0, 0.0, 0.0, 1.0);  // Clear to black, fully opaque
   gl.clearDepth(1.0);                 // Clear everything
   gl.enable(gl.DEPTH_TEST);           // Enable depth testing
@@ -402,9 +394,9 @@ function drawScene(gl, programInfo, buffers, texture, deltaTime) {
       var myCache = myCacheMap.get(0)
       if (myCache == null) {
         myCache = new MyCache()
-        myCache.tex = loadTexture(gl, 'cubetexture.png')
+        myCache.tex = loadTexture(gl, groundImage, 1000, 1000)
         myCache.buffers = initBuffers(gl, 8.8, 18.8)
-        
+
         myCacheMap.set(0, myCache)
       }
       drawOne(gl, programInfo, myCache.buffers, myCache.tex, deltaTime, projectionMatrix, modelViewMatrix)
@@ -413,8 +405,8 @@ function drawScene(gl, programInfo, buffers, texture, deltaTime) {
       var id = body.GetUserData();
       if (id > 0) {
           var c = body.GetWorldCenter();
-          var w = myBlogImages.get(id).width / myImageScale;
-          var h = myBlogImages.get(id).height / myImageScale;
+          var w = myBlogImages.get(id).width;
+          var h = myBlogImages.get(id).height;
           var a = body.GetAngle();
 
 
@@ -433,8 +425,8 @@ function drawScene(gl, programInfo, buffers, texture, deltaTime) {
           var myCache = myCacheMap.get(id);
           if (myCache == null) {
             myCache = new MyCache()
-            myCache.tex = loadTexture(gl, myBlogJson[id]['path'])
-            myCache.buffers = initBuffers(gl, myBlogImages.get(id).width * mul, myBlogImages.get(id).height * mul)
+            myCache.tex = loadTexture(gl, myBlogImages.get(id), w, h)
+            myCache.buffers = initBuffers(gl, w * mul, h * mul)
             myCacheMap.set(id, myCache)
           }
           drawOne(gl, programInfo, myCache.buffers, myCache.tex, deltaTime, projectionMatrix, modelViewMatrix)

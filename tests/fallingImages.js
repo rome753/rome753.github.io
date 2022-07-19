@@ -21,14 +21,14 @@ embox2dTest_fallingImages.prototype.setup = function() {
     var groundBody = world.CreateBody(bd_ground);
 
     var w2 = CW / 2 / PTM;
-    var h2 = CH / 2 / PTM;
+    var h2 = CH / 2 / PTM - 1;
     //ground edges
     var shape0 = new b2EdgeShape();
-    shape0.Set(new b2Vec2(-w2, -h2), new b2Vec2(w2, -h2));
+    shape0.Set(new b2Vec2(-w2, -h2), new b2Vec2(w2, -h2)); // bottom
     groundBody.CreateFixture(shape0, 0.0);
-    shape0.Set(new b2Vec2(-w2, -h2), new b2Vec2(-w2, h2 * 10));
+    shape0.Set(new b2Vec2(-w2, -h2), new b2Vec2(-w2, h2 * 10)); // left
     groundBody.CreateFixture(shape0, 0.0);
-    shape0.Set(new b2Vec2(w2, -h2), new b2Vec2(w2, h2 * 10));
+    shape0.Set(new b2Vec2(w2, -h2), new b2Vec2(w2, h2 * 10)); // right
     groundBody.CreateFixture(shape0, 0.0);
 
 
