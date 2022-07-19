@@ -392,6 +392,24 @@ function drawScene(gl, programInfo, buffers, texture, deltaTime) {
       if (body == null || body.a == 0) {
           break;
       }
+
+      // 地板
+      var modelViewMatrix = mat4.create();
+      mat4.translate(modelViewMatrix,     // destination matrix
+        modelViewMatrix,     // matrix to translate
+        [0, -22, -6]);  // amount to translate
+
+      var myCache = myCacheMap.get(0)
+      if (myCache == null) {
+        myCache = new MyCache()
+        myCache.tex = loadTexture(gl, 'cubetexture.png')
+        myCache.buffers = initBuffers(gl, 8.8, 18.8)
+        
+        myCacheMap.set(0, myCache)
+      }
+      drawOne(gl, programInfo, myCache.buffers, myCache.tex, deltaTime, projectionMatrix, modelViewMatrix)
+
+      // body
       var id = body.GetUserData();
       if (id > 0) {
           var c = body.GetWorldCenter();
@@ -400,7 +418,7 @@ function drawScene(gl, programInfo, buffers, texture, deltaTime) {
           var a = body.GetAngle();
 
 
-          const modelViewMatrix = mat4.create();
+          var modelViewMatrix = mat4.create();
           var mul = 0.214
           mat4.translate(modelViewMatrix,     // destination matrix
             modelViewMatrix,     // matrix to translate
@@ -419,7 +437,7 @@ function drawScene(gl, programInfo, buffers, texture, deltaTime) {
             myCache.buffers = initBuffers(gl, myBlogImages.get(id).width * mul, myBlogImages.get(id).height * mul)
             myCacheMap.set(id, myCache)
           }
-          drawOne(gl, programInfo, myCache.buffers, myCache.tex, deltaTime, projectionMatrix, modelViewMatrix, i)
+          drawOne(gl, programInfo, myCache.buffers, myCache.tex, deltaTime, projectionMatrix, modelViewMatrix)
 
       }
       body = body.GetNext();
