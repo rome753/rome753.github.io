@@ -316,10 +316,20 @@ function init() {
 
     if (window.DeviceMotionEvent) {
         alert('Support DeviceMotionEvent')
+        window.addEventListener('devicemotion', function(event) {
+            if (world == null) {
+                return;
+            }
+            var ax = event.acceleration.x;
+            var ax = event.acceleration.y;
+            var g = world.GetGravity();
+            g.x = ax;
+            g.y = ay;
+            world.SetGravity(g);
+        });
     } else {
         alert('Not Support DeviceMotionEvent')
     }
-
 }
 
 function changeTest() {    
