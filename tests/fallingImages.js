@@ -106,8 +106,8 @@ function addImageBody(id) {
             body.CreateFixture(shape, 1);
         // }
 
+        // 标题用几个DistanceJoint固定在页面上方，有一定弹性
         if (id == 1) {
-            body.SetFixedRotation(true);
             var def = new b2DistanceJointDef();
             def.collideConnected = false;
             def.frequencyHz = 2;
@@ -115,10 +115,18 @@ function addImageBody(id) {
             def.length = 0;
             def.bodyA = groundBody;
             def.bodyB = body;
-            def.localAnchorA.x = 0;
+            def.localAnchorA.x = -1;
             def.localAnchorA.y = 10;
-            def.localAnchorB.x = 0;
+            def.localAnchorB.x = -1;
             def.localAnchorB.y = 0;
+            world.CreateJoint(def);
+
+            def.localAnchorA.x = 1;
+            def.localAnchorB.x = 1;
+            world.CreateJoint(def);
+
+            def.localAnchorA.x = 0;
+            def.localAnchorB.y = 1;
             world.CreateJoint(def);
         }
         
