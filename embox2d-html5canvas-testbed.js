@@ -314,7 +314,11 @@ function init() {
         return false;
     };
 
-
+    if (window.DeviceMotionEvent) {
+        alert('Support DeviceMotionEvent')
+    } else {
+        alert('Not Support DeviceMotionEvent')
+    }
 
 }
 
