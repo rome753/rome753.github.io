@@ -2,6 +2,8 @@ var myBlogScale = 1 / PTM * 0.54 // 图片像素跟body比例倍数
 var myBlogJson = {}
 var myBlogImages = new Map(); // 图片缓存
 
+var groundBody;
+
 var embox2dTest_fallingImages = function() {
 }
 
@@ -18,7 +20,7 @@ embox2dTest_fallingImages.prototype.setup = function() {
     bodies = [null]; // Indexes start from 1
     
     var bd_ground = new b2BodyDef();
-    var groundBody = world.CreateBody(bd_ground);
+    groundBody = world.CreateBody(bd_ground);
 
     var w2 = CW / 2 / PTM;
     var h2 = CH / 2 / PTM - 1;
@@ -93,18 +95,33 @@ function addImageBody(id) {
         var body = world.CreateBody(bd);
         var randomValue = Math.random();
 
-        if (id == 0) {
         // if (id == 753) {
-            var shape = new b2CircleShape();
-            console.log(shape);
-            shape.set_m_radius(w / 2);
-            body.CreateFixture(shape, 1);
-        } else {
+        //     var shape = new b2CircleShape();
+        //     console.log(shape);
+        //     shape.set_m_radius(w / 2);
+        //     body.CreateFixture(shape, 1);
+        // } else {
             var shape = new b2PolygonShape();
             shape.SetAsBox(w / 2, h / 2);
             body.CreateFixture(shape, 1);
-        }
+        // }
 
+        if (id == 1) {
+            body.SetFixedRotation(true);
+            var def = new b2DistanceJointDef();
+            def.collideConnected = false;
+            def.frequencyHz = 2;
+            def.dampingRatio = 1;
+            def.length = 0;
+            def.bodyA = groundBody;
+            def.bodyB = body;
+            def.localAnchorA.x = 0;
+            def.localAnchorA.y = 10;
+            def.localAnchorB.x = 0;
+            def.localAnchorB.y = 0;
+            world.CreateJoint(def);
+        }
+        
         temp.Set(22*(Math.random()-0.5), 12);
         body.SetTransform(temp, 0.0);
         body.SetLinearVelocity(ZERO);

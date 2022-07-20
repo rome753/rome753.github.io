@@ -21,6 +21,7 @@ def parseFile():
     f = open('cnblog.txt', 'r')
     jo = json.loads(f.read())
     f.close()
+
     for j in jo:
         title = j['title']
         id = j['postid']
@@ -38,12 +39,28 @@ def parseFile():
         }
         info.append(d)
 
+    # 添加标题图片
+    fpath = 'images/1.png'
+    if os.path.exists(fpath):
+        os.remove(fpath)
+    im = createTitle(False, "Rome753's Blog")
+    im.save(fpath)
+
+    d = {
+        'id': 1,
+        'path': fpath,
+        'link': 'https://rome753.github.io'
+    }
+    info.append(d)
+
+    # 添加Github图片
     d = {
         'id': 753,
         'path': 'images/753.png',
         'link': 'https://github.com/rome753'
     }
     info.append(d)
+
     f = open('images/json.txt', 'w')
     f.write(json.dumps(info))
     f.close()
@@ -56,6 +73,27 @@ def findHalfWidth(text):
         if font.getsize(t)[0] > w / 2:
             return i
     return 0
+
+def createTitle(isShow, text):
+    font = ImageFont.truetype(fontPath, 30)
+    textSize = font.getsize(text)
+    
+    pd = 10
+    w = textSize[0]
+    h = textSize[1]
+    w = pd + w + pd
+    h = pd + h + pd
+
+    fontColor = '#000000'
+
+    im = Image.new("RGBA", [w, h], (255,255,255,0))
+    dr = ImageDraw.Draw(im)
+
+    dr.rounded_rectangle(xy=[0,0,w,h], radius=0, fill='#ffffff')
+    dr.text((pd, pd), text, font=font, fill=fontColor)
+    if isShow:
+        im.show()
+    return im
 
 
 def createImage(isShow, text):
@@ -100,6 +138,7 @@ def createImage(isShow, text):
 parseFile()
 
 # createImage(True, 'Android ios这是测试134加肥加大')
+# createTitle(True)
 
 
 
