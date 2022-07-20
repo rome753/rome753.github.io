@@ -16,32 +16,27 @@ headers = {
 def parseFile():
     if os.path.exists('images') == False:
         os.mkdir('images')
-    f = open('cnblog.txt', 'r')
+
     info = []
-    i = 0
-    id = 0
-    for line in f:
-        i += 1
-        if i == 1:
-            id = int(line)
-        if i == 2:
-            i = 0
-            title = line
-            print(title)
-            fpath = 'images/%s.png' % id
-            if os.path.exists(fpath):
-                os.remove(fpath)
-            im = createImage(False, title)
-            im.save(fpath)
-
-            d = {
-                'id': id,
-                'path': fpath,
-                'link': 'https://www.cnblogs.com/rome753/p/%d.html' % id
-            }
-            info.append(d)
-
+    f = open('cnblog.txt', 'r')
+    jo = json.loads(f.read())
     f.close()
+    for j in jo:
+        title = j['title']
+        id = j['postid']
+        print(title)
+        fpath = 'images/%s.png' % id
+        if os.path.exists(fpath):
+            os.remove(fpath)
+        im = createImage(False, title)
+        im.save(fpath)
+
+        d = {
+            'id': id,
+            'path': fpath,
+            'link': 'https://www.cnblogs.com/rome753/p/%d.html' % id
+        }
+        info.append(d)
 
     d = {
         'id': 753,
@@ -102,8 +97,6 @@ def createImage(isShow, text):
     return im
 
 
-# if os.path.exists(jsonPath) == False:
-#     requestSaveFile()
 parseFile()
 
 # createImage(True, 'Android ios这是测试134加肥加大')

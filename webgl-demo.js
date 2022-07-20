@@ -302,8 +302,8 @@ function loadTexture(gl, image, w, h) {
   // we'll update the texture with the contents of the image.
   const level = 0;
   const internalFormat = gl.RGBA;
-  const width = w;
-  const height = h;
+  const width = 1;
+  const height = 1;
   const border = 0;
   const srcFormat = gl.RGBA;
   const srcType = gl.UNSIGNED_BYTE;

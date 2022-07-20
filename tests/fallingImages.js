@@ -150,7 +150,6 @@ function addOne() {
     if (allIdIndex < allId.length) {
         var id = allId[allIdIndex++];
         addImageBody(id);
-        console.log(id);
         setTimeout(() => {
             addOne();
         }, 50);
