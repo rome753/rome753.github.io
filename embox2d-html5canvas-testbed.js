@@ -320,8 +320,8 @@ function init() {
             if (world == null) {
                 return;
             }
-            var ax = event.acceleration.x;
-            var ax = event.acceleration.y;
+            var ax = event.accelerationIncludingGravity.x;
+            var ax = event.accelerationIncludingGravity.y;
             var g = world.GetGravity();
             g.x = ax;
             g.y = ay;
