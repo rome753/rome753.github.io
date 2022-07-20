@@ -35,37 +35,59 @@ function main() {
     uniform mat4 uModelViewMatrix;
     uniform mat4 uProjectionMatrix;
 
-    varying highp vec2 vTextureCoord;
-    varying highp vec3 vLighting;
+    varying highp vec3 aFragPos;
+    varying highp vec3 aNormal;
+    varying highp vec2 aTexCoord;
 
     void main(void) {
       gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
-      vTextureCoord = aTextureCoord;
-
-      // Apply lighting effect
-
-      highp vec3 ambientLight = vec3(0.3, 0.3, 0.3);
-      highp vec3 directionalLightColor = vec3(1, 1, 1);
-      highp vec3 directionalVector = normalize(vec3(0.85, 0.5, 1.15));
-
-      highp vec4 transformedNormal = uNormalMatrix * vec4(aVertexNormal, 1.0);
-
-      highp float directional = max(dot(transformedNormal.xyz, directionalVector), 0.0);
-      vLighting = ambientLight + (directionalLightColor * directional);
+      aFragPos = vec3(uNormalMatrix * aVertexPosition);
+      aNormal = vec3(uNormalMatrix * vec4(aVertexNormal, 1.0));
+      aTexCoord = aTextureCoord;
     }
   `;
 
   // Fragment shader program
 
   const fsSource = `
-    varying highp vec2 vTextureCoord;
-    varying highp vec3 vLighting;
+    precision mediump float;
 
+    varying highp vec3 aFragPos;
+    varying highp vec3 aNormal;
+    varying highp vec2 aTexCoord;
+    
+    // out vec4 fragColor;
+    
     uniform sampler2D uSampler;
-
-    void main(void) {
-      highp vec4 texelColor = texture2D(uSampler, vTextureCoord);
-      gl_FragColor = vec4(texelColor.rgb * vLighting, texelColor.a);
+    vec3 lightColor = vec3(1.0, 1.0, 1.0);
+    vec3 lightPos= vec3(0.0, 0.5, 0.8);
+    vec3 viewPos= vec3(0.0, 0.0, 1.0);
+    
+    void main() {
+        // 纹理颜色
+        vec4 texColor = texture2D(uSampler, aTexCoord);
+        if (texColor.a == 0.0) {
+            texColor = vec4(1,1,1,1);
+        }
+        // 环境光
+        float ambientStrength = 0.2;
+        vec3 ambient = ambientStrength * lightColor;
+        // 漫反射光
+        vec3 norm = normalize(aNormal);
+        vec3 lightDir = normalize(lightPos - aFragPos);
+    
+        float diff = max(dot(norm, lightDir), 0.0);
+        vec3 diffuse = diff * lightColor;
+    
+        // 镜面光
+        float specularStrength = 0.2;
+        vec3 viewDir = normalize(viewPos - aFragPos);
+        vec3 reflectDir = reflect(-lightDir, norm);
+    
+        float spec = pow(max(dot(viewDir, reflectDir), 0.0), 2.0);
+        vec3 specular = specularStrength * spec * lightColor;
+    
+        gl_FragColor = vec4(ambient + diffuse + specular, 1.0) * texColor;
     }
   `;
 
