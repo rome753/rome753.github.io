@@ -323,8 +323,8 @@ function init() {
             var ax = event.accelerationIncludingGravity.x;
             var ay = event.accelerationIncludingGravity.y;
             var g = world.GetGravity();
-            g.x = ax;
-            g.y = ay;
+            g.x = -ax * 2;
+            g.y = -ay * 2;
             world.SetGravity(g);
         });
     } else {
