@@ -315,7 +315,7 @@ function init() {
     };
 
     if (window.DeviceMotionEvent) {
-        alert('Support DeviceMotionEvent')
+        // alert('Support DeviceMotionEvent')
         window.addEventListener('devicemotion', function(event) {
             if (world == null) {
                 return;
@@ -328,7 +328,7 @@ function init() {
             world.SetGravity(g);
         });
     } else {
-        alert('Not Support DeviceMotionEvent')
+        // alert('Not Support DeviceMotionEvent')
     }
 }
 
@@ -431,8 +431,8 @@ function drawImage() {
         var id = body.GetUserData();
         if (id > 0) {
             var c = body.GetWorldCenter();
-            var w = myBlogImages.get(id).width / myImageScale;
-            var h = myBlogImages.get(id).height / myImageScale;
+            var w = myBlogImages.get(id).width * myBlogScale;
+            var h = myBlogImages.get(id).height * myBlogScale;
             var a = body.GetAngle();
 
             // 旋转不在中心点，先平移再平移回来
