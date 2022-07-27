@@ -74,10 +74,10 @@ def getRecentPost():
     f.close()
 
 
-
 # readMyBlog()
 # new_post('33测试标题','33这是测试内容',None)
-# getRecentPost()
+
+getRecentPost()
 
 
 # j = {

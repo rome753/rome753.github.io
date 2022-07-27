@@ -34,6 +34,7 @@ def parseFile():
 
         d = {
             'id': id,
+            'title': title,
             'path': fpath,
             'link': 'https://www.cnblogs.com/rome753/p/%d.html' % id
         }

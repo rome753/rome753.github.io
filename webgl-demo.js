@@ -360,6 +360,8 @@ function isPowerOf2(value) {
   return (value & (value - 1)) == 0;
 }
 
+var searchScale = 1.0;
+
 //
 // Draw the scene.
 //
@@ -398,6 +400,8 @@ function drawScene(gl, programInfo, deltaTime) {
   // Set the drawing position to the "identity" point, which is
   // the center of the scene.
 
+  var kw = document.getElementById('search').value
+
   if (world == null) {
     return
   }
@@ -426,6 +430,16 @@ function drawScene(gl, programInfo, deltaTime) {
       // body
       var id = body.GetUserData();
       if (id > 0) {
+
+          var isInSearch = false;
+          if (kw.length > 0) {
+            var title = myBlogJson[id]['title'];
+            if (title != null && title.toLowerCase().includes(kw.toLowerCase())) {
+              isInSearch = true;
+            }
+          }
+
+
           var c = body.GetWorldCenter();
           var w = myBlogImages.get(id).width;
           var h = myBlogImages.get(id).height;
@@ -443,6 +457,11 @@ function drawScene(gl, programInfo, deltaTime) {
                     a,     // amount to rotate in radians
                     [0, 0, 1]);       // axis to rotate around (Z)
 
+          if (isInSearch) {
+            mat4.scale(modelViewMatrix,  // destination matrix
+              modelViewMatrix,  // matrix to rotate
+              [searchScale, searchScale, searchScale]);       // axis to rotate around (Z)
+          }
           mul = myBlogScale * 0.106
           var myCache = myCacheMap.get(id);
           if (myCache == null) {
@@ -459,6 +478,10 @@ function drawScene(gl, programInfo, deltaTime) {
   // Update the rotation for the next draw
 
   cubeRotation += deltaTime;
+  searchScale += 0.004;
+  if (searchScale > 1.2) {
+    searchScale = 1.0;
+  }
 }
 
 
