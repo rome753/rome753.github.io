@@ -314,22 +314,22 @@ function init() {
         return false;
     };
 
-    if (window.DeviceMotionEvent) {
-        // alert('Support DeviceMotionEvent')
-        window.addEventListener('devicemotion', function(event) {
-            if (world == null) {
-                return;
-            }
-            var ax = event.accelerationIncludingGravity.x;
-            var ay = event.accelerationIncludingGravity.y;
-            var g = world.GetGravity();
-            g.x = -ax * 2;
-            g.y = -ay * 2;
-            world.SetGravity(g);
-        });
-    } else {
-        // alert('Not Support DeviceMotionEvent')
-    }
+    // if (window.DeviceMotionEvent) {
+    //     // alert('Support DeviceMotionEvent')
+    //     window.addEventListener('devicemotion', function(event) {
+    //         if (world == null) {
+    //             return;
+    //         }
+    //         var ax = event.accelerationIncludingGravity.x;
+    //         var ay = event.accelerationIncludingGravity.y;
+    //         var g = world.GetGravity();
+    //         g.x = -ax * 2;
+    //         g.y = -ay * 2;
+    //         world.SetGravity(g);
+    //     });
+    // } else {
+    //     // alert('Not Support DeviceMotionEvent')
+    // }
 }
 
 function changeTest() {    
